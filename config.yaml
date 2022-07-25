@@ -1,3 +1,9 @@
+Log:
+  Level: "info"
+  ExportConsole: 1
+  ExportFile:
+    Path: "./run.log"
+
 Frontend:
   HttpPort: 8112
   HttpTimeout: 2
