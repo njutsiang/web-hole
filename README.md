@@ -14,6 +14,10 @@
 **Backend**：<br>
 HTTP 后端服务端。Backend 可以是任何环境的 HTTP 服务器，可以是本地 PC、内网主机、其他公网主机、或者是一个负载均衡，只要是 Proxy 能够访问到的 HTTP 服务都可以。
 
+## 代理流程
+
+<img src="https://github.com/njutsiang/web-hole/tree/main/doc/process.png">
+
 ## 能解决什么问题？
 
 1、可以将你的网站部署在公司内网，或者你的 PC 上，并且实现高效低延迟的访问，只需要一台低配的云主机，无需再购买云数据库、云存储等等，能节省不少费用。
