@@ -6,7 +6,9 @@ Log:
 
 Frontend:
   HttpPort: 8112
-  HttpTimeout: 2
+  HttpTimeout: 30
+  HttpsCertFile: "/data/ssl/web-hole.local.com.crt"
+  HttpsKeyFile: "/data/ssl/web-hole.local.com.key"
   WebsocketPort: 8113
   WebsocketPath: "/proxy"
   SecretKey: "123456"

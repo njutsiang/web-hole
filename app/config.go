@@ -22,6 +22,8 @@ type ConfigYaml struct {
 	Frontend struct {
 		HttpPort      int    `yaml:"HttpPort"`
 		HttpTimeout   int    `yaml:"HttpTimeout"`
+		HttpsCertFile string `yaml:"HttpsCertFile"`
+		HttpsKeyFile  string `yaml:"HttpsKeyFile"`
 		WebsocketPort int    `yaml:"WebsocketPort"`
 		WebsocketPath string `yaml:"WebsocketPath"`
 		SecretKey     string `yaml:"SecretKey"`

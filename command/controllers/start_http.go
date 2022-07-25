@@ -18,7 +18,12 @@ func StartHttp() {
 	engine.NoRoute(logics.HttpHandler)
 	engine.NoMethod(logics.HttpHandler)
 	engine.Any("/", logics.HttpHandler)
-	err := engine.Run(fmt.Sprintf(":%d", app.Config.Frontend.HttpPort))
+	var err error
+	if app.Config.Frontend.HttpsCertFile != "" && app.Config.Frontend.HttpsKeyFile != "" {
+		err = engine.RunTLS(fmt.Sprintf(":%d", app.Config.Frontend.HttpPort), app.Config.Frontend.HttpsCertFile, app.Config.Frontend.HttpsKeyFile)
+	} else {
+		err = engine.Run(fmt.Sprintf(":%d", app.Config.Frontend.HttpPort))
+	}
 	if err != nil {
 		app.Log.Error("启动 HTTP 服务失败 " + err.Error())
 	}

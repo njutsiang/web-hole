@@ -32,7 +32,7 @@ HTTP 后端服务端。Backend 可以是任何环境的 HTTP 服务器，可以�
 - [x] 解决等待响应的 ChanMap 并发读写的问题
 - [x] Frontend 支持多个 Proxy 服务
 - [x] 优化日志组件、日志级别
-- [ ] Frontend 支持 https
+- [x] Frontend 支持 https
 - [ ] Proxy 支持多进程多连接
 - [ ] 完善使用说明文档
 
