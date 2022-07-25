@@ -1,0 +1,14 @@
+Frontend:
+  HttpPort: 8112
+  HttpTimeout: 2
+  WebsocketPort: 8113
+  WebsocketPath: "/proxy"
+  SecretKey: "123456"
+
+Proxy:
+  FrontendUrl: "ws://127.0.0.1:8113/proxy"
+  BackendHost: "http://127.0.0.1:8114"
+  SecretKey: "123456"
+
+Backend:
+  HttpPort: 8114
