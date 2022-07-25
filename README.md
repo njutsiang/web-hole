@@ -31,10 +31,10 @@ HTTP 后端服务端。Backend 可以是任何环境的 HTTP 服务器，可以�
 - [x] 解决 Websocket 并发写的问题
 - [x] 解决等待响应的 ChanMap 并发读写的问题
 - [x] Frontend 支持多个 Proxy 服务
+- [x] 优化日志组件、日志级别
 - [ ] Frontend 支持 https
 - [ ] Proxy 支持多进程多连接
-- [ ] 优化日志组件、日志级别
-- [ ] 完善使用文档
+- [ ] 完善使用说明文档
 
 ## 压力测试
 
@@ -97,44 +97,44 @@ Status code distribution:
 
 ```
 Summary:
-  Total:        60.0068 secs
-  Slowest:      0.0317 secs
+  Total:        60.0022 secs
+  Slowest:      0.0228 secs
   Fastest:      0.0002 secs
-  Average:      0.0023 secs
-  Requests/sec: 1366.2459
+  Average:      0.0018 secs
+  Requests/sec: 1688.1889
 
-  Total data:   1229760 bytes
+  Total data:   1519425 bytes
   Size/request: 15 bytes
 
 Response time histogram:
   0.000 [1]     |
-  0.003 [69724] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.007 [7119]  |■■■■
-  0.010 [3824]  |■■
-  0.013 [876]   |■
-  0.016 [273]   |
-  0.019 [130]   |
-  0.022 [29]    |
-  0.025 [6]     |
-  0.029 [0]     |
-  0.032 [2]     |
+  0.002 [88670] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.005 [6198]  |■■■
+  0.007 [3580]  |■■
+  0.009 [2006]  |■
+  0.011 [546]   |
+  0.014 [185]   |
+  0.016 [68]    |
+  0.018 [21]    |
+  0.021 [13]    |
+  0.023 [7]     |
 
 Latency distribution:
-  10% in 0.0009 secs
-  25% in 0.0012 secs
-  50% in 0.0015 secs
-  75% in 0.0022 secs
-  90% in 0.0049 secs
-  95% in 0.0071 secs
-  99% in 0.0110 secs
+  10% in 0.0008 secs
+  25% in 0.0010 secs
+  50% in 0.0012 secs
+  75% in 0.0017 secs
+  90% in 0.0032 secs
+  95% in 0.0055 secs
+  99% in 0.0089 secs
 
 Details (average, fastest, slowest):
   DNS+dialup:   0.0000 secs, 0.0000 secs, 0.0008 secs
   DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
-  req write:    0.0000 secs, 0.0000 secs, 0.0054 secs
-  resp wait:    0.0022 secs, 0.0002 secs, 0.0316 secs
-  resp read:    0.0000 secs, 0.0000 secs, 0.0102 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0061 secs
+  resp wait:    0.0017 secs, 0.0002 secs, 0.0227 secs
+  resp read:    0.0000 secs, 0.0000 secs, 0.0075 secs
 
 Status code distribution:
-  [200] 81984 responses
+  [200] 101295 responses
 ```
