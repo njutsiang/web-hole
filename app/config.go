@@ -1,15 +1,24 @@
 package app
 
 import (
+	"github.com/njutsiang/web-hole/exception"
 	"gopkg.in/yaml.v2"
 	"io"
-	"log"
 	"os"
 )
 
+// 配置
 var Config = ConfigYaml{}
 
+// 配置数据结构
 type ConfigYaml struct {
+	Log struct {
+		Level         string `yaml:"Level"`
+		ExportConsole int    `yaml:"ExportConsole"`
+		ExportFile    struct {
+			Path string `yaml:"Path"`
+		} `yaml:"ExportFile"`
+	} `yaml:"Log"`
 	Frontend struct {
 		HttpPort      int    `yaml:"HttpPort"`
 		HttpTimeout   int    `yaml:"HttpTimeout"`
@@ -31,18 +40,18 @@ type ConfigYaml struct {
 func InitConfig() {
 	file, err := os.Open("./config.yaml")
 	if err != nil {
-		log.Println(err)
+		exception.Throw(exception.InitConfigFailed, "打开配置文件失败 " + err.Error())
 		return
 	}
 	content, err := io.ReadAll(file)
 	if err != nil {
-		log.Println(err)
+		exception.Throw(exception.InitConfigFailed, "读取配置文件失败 " + err.Error())
 		return
 	}
 	config := ConfigYaml{}
 	err = yaml.Unmarshal(content, &config)
 	if err != nil {
-		log.Println(err)
+		exception.Throw(exception.InitConfigFailed, "解析配置文件失败 " + err.Error())
 		return
 	}
 	Config = config

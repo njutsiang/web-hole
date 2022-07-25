@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/njutsiang/web-hole/app"
-	"log"
 	"net/http"
 )
 
 // 启动 Backend 服务
 func StartBackend() {
-	log.Println("启动 Backend 服务")
+	app.Log.Info("启动 Backend 服务")
 	gin.SetMode(gin.ReleaseMode)
 	engine := gin.Default()
 	engine.HandleMethodNotAllowed = true
@@ -32,6 +31,6 @@ func StartBackend() {
 	})
 	err := engine.Run(fmt.Sprintf(":%d", app.Config.Backend.HttpPort))
 	if err != nil {
-		log.Println("启动 Backend 服务失败", err)
+		app.Log.Error("启动 Backend 服务失败 " + err.Error())
 	}
 }

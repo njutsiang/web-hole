@@ -2,9 +2,9 @@ package logics
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/njutsiang/web-hole/app"
-	"log"
 	"math/rand"
 )
 
@@ -13,11 +13,11 @@ func AddWebsocketConn(conn *app.WebsocketConn) {
 	app.WebsocketConnChan <- conn
 }
 
-// 添加 Websocket 连接到全局
+// 消费消息队列：添加 Frontend 和 Proxy 的连接
 func ConsumeWebsocketConnChan() {
 	for websocketConn := range app.WebsocketConnChan {
 		app.WebsocketConns = append(app.WebsocketConns, websocketConn)
-		log.Println("添加 Websocket 连接到全局", websocketConn.Id)
+		app.Log.Info("将与 Proxy 的连接添加到全局 " + websocketConn.Id)
 	}
 }
 
@@ -26,7 +26,7 @@ func DelWebsocketConn(connId string) {
 	app.WebsocketConnDelChan <- connId
 }
 
-// 从全局移除 Websocket 连接
+// 消费消息队列：删除 Frontend 和 Proxy 的连接
 func ConsumeWebsocketConnDelChan() {
 	for connId := range app.WebsocketConnDelChan {
 		for i, websocketConn := range app.WebsocketConns {
@@ -36,7 +36,7 @@ func ConsumeWebsocketConnDelChan() {
 				} else {
 					app.WebsocketConns = append(app.WebsocketConns[0:i], app.WebsocketConns[i+1:]...)
 				}
-				log.Println("从全局移除 Websocket 连接", connId)
+				app.Log.Info("从全局移除与 Proxy 的连接 " + connId)
 				break
 			}
 		}
@@ -45,30 +45,30 @@ func ConsumeWebsocketConnDelChan() {
 
 // 接收代理的响应
 func ReceiveProxyResponse(message []byte) {
-	log.Println("接收代理的响应", string(message))
 	response := app.Response{}
 	err := json.Unmarshal(message, &response)
 	if err != nil {
-		log.Println("解析代理的响应失败", err)
+		app.Log.Error("解析响应失败 " + err.Error())
 		return
 	}
 	if response.RequestId == "" {
-		log.Println("RequestId 为空")
+		app.Log.Error("响应的 RequestId 为空")
 		return
 	}
+	app.Log.Info(fmt.Sprintf("接收到 Proxy 的响应：%s %d", response.RequestId, response.StatusCode))
 	app.ResponseChanMapActionChan <- app.ResponseChanMapAction{
 		Name: "write",
 		Response: response,
 	}
 }
 
-// 消费将请求发送至代理服务的通道
+// 消费消息队列：发送到代理服务器的消息
 func ConsumeRequestMessageChan() {
 	for message := range app.RequestMessageChan {
 		websocketConn := app.WebsocketConns[rand.Intn(len(app.WebsocketConns))]
 		err := websocketConn.Conn.WriteMessage(websocket.TextMessage, message)
 		if err != nil {
-			log.Println("将请求发送至代理服务失败")
+			app.Log.Error("将请求发送至 Proxy 失败 " + err.Error())
 		}
 	}
 }

@@ -3,17 +3,17 @@ package controllers
 import (
 	"github.com/njutsiang/web-hole/app"
 	"github.com/njutsiang/web-hole/logics"
-	"log"
 	"os"
 	"os/signal"
 )
 
 // 启动 Proxy：Websocket 客户端、HTTP 代理
 func StartProxy() {
-	log.Println("监听进程信号")
+	app.Log.Info("监听进程信号")
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 
+	// 消费消息队列：待回复的消息
 	go logics.ConsumeReplyMessageChan()
 
 	// 连接到 Frontend
@@ -27,7 +27,6 @@ func StartProxy() {
 
 	// 当进程停止时，关闭连接
 	<- interrupt
-	log.Println("进程停止")
+	app.Log.Info("进程停止")
 	app.DisconnectFrontend()
-	log.Println("END")
 }

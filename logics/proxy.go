@@ -3,11 +3,11 @@ package logics
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/njutsiang/web-hole/app"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -22,7 +22,7 @@ func SendHeartbeat() {
 		}
 		err = app.ProxyConn.WriteMessage(websocket.PingMessage, []byte{})
 		if err != nil {
-			log.Println("发送心跳失败", err)
+			app.Log.Error("发送心跳失败 " + err.Error())
 			app.ConnectFrontend(true)
 		}
 	}
@@ -32,24 +32,24 @@ func SendHeartbeat() {
 func ReadRequest() {
 	for {
 		if app.ProxyConn == nil {
-			log.Println("Websocket 连接不存在")
+			app.Log.Error("与 Frontend 的连接不存在")
 			time.Sleep(3 * time.Second)
 			continue
 		}
 		messageType, messageBody, messageErr := app.ProxyConn.ReadMessage()
 		if messageErr != nil {
-			log.Println("读取消息失败", messageErr)
+			app.Log.Error("与 Frontend 的连接异常 " + messageErr.Error())
 			time.Sleep(3 * time.Second)
 			continue
 		}
-		log.Println("收到消息", string(messageBody))
 		if messageType == websocket.TextMessage {
 			request := app.Request{}
 			err := json.Unmarshal(messageBody, &request)
 			if err != nil {
-				log.Println("解析消息失败", err)
+				app.Log.Error("解析请求失败 " + err.Error())
 				continue
 			}
+			app.Log.Info("接收到请求：" + request.Id + " " + request.Method + " " + request.Uri)
 			ProxyRequest(request)
 		}
 	}
@@ -88,6 +88,7 @@ func ReplyError(requestId string, err error) {
 		StatusCode: http.StatusBadGateway,
 		Body: []byte(err.Error()),
 	}
+	app.Log.Info(fmt.Sprintf("向 Frontend 回复响应：%s %d %s", requestId, response.StatusCode, err.Error()))
 	responseJson, _ := json.Marshal(response)
 	app.ReplyMessageChan <- responseJson
 }
@@ -106,20 +107,21 @@ func ReplyResponse(requestId string, response *http.Response) {
 		Header: response.Header,
 		Body: body,
 	}
+	app.Log.Info(fmt.Sprintf("向 Frontend 回复响应：%s %d", requestId, response.StatusCode))
 	newResponseJson, _ := json.Marshal(newResponse)
 	app.ReplyMessageChan <- newResponseJson
 }
 
-// 消费回复消息的队列
+// 消费消息队列：待回复的消息
 func ConsumeReplyMessageChan() {
 	for message := range app.ReplyMessageChan {
 		if app.ProxyConn == nil {
-			log.Println("Websocket 连接不存在")
+			app.Log.Error("与 Frontend 的连接不存在")
 			continue
 		}
 		err := app.ProxyConn.WriteMessage(websocket.TextMessage, message)
 		if err != nil {
-			log.Println("回复消息失败", err)
+			app.Log.Error("向 Frontend 发送响应失败" + err.Error())
 		}
 	}
 }

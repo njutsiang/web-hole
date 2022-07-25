@@ -3,7 +3,7 @@ package app
 // 接收响应的通道集合
 var ResponseChanMap = map[string]chan Response{}
 
-// 待发送到代理服务器的消息队列
+// 消息队列：待发送到代理服务器消息
 var RequestMessageChan = make(chan []byte, 1000)
 
 // 请求

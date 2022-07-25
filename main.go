@@ -7,5 +7,6 @@ import (
 
 func main() {
 	app.InitConfig()
+	app.InitLog()
 	command.Run()
 }

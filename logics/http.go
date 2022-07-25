@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/njutsiang/web-hole/app"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -24,6 +23,7 @@ func HttpHandler(c *gin.Context) {
 		Body: body,
 		Timeout: app.Config.Frontend.HttpTimeout,
 	}
+	app.Log.Info("用户请求：" + request.Id + " " + request.Method + " " + request.Uri)
 
 	// 接收响应的通道
 	responseChan := make(chan app.Response)
@@ -69,7 +69,7 @@ func HttpHandler(c *gin.Context) {
 		}
 		_, err := fmt.Fprint(c.Writer, string(response.Body))
 		if err != nil {
-			log.Println("响应错误", err)
+			app.Log.Error("响应错误 " + err.Error())
 		}
 	}
 }

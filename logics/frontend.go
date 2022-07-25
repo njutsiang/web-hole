@@ -3,10 +3,9 @@ package logics
 import (
 	"encoding/json"
 	"github.com/njutsiang/web-hole/app"
-	"log"
 )
 
-// 消费对 ResponseChanMap 的操作消息队列
+// 消费消息队列：对 ResponseChanMap 的操作
 func ConsumeResponseChanMapActionChan() {
 	for action := range app.ResponseChanMapActionChan {
 		switch action.Name {
@@ -20,7 +19,7 @@ func ConsumeResponseChanMapActionChan() {
 		case "write":
 			responseChan, ok := app.ResponseChanMap[action.Response.RequestId]
 			if !ok {
-				log.Println("响应的通道不存在")
+				app.Log.Error("响应的通道不存在")
 				continue
 			}
 			responseChan <- action.Response

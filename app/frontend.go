@@ -1,6 +1,6 @@
 package app
 
-// 对 ResponseChanMap 的操作消息队列
+// 消息队列：对 ResponseChanMap 的操作
 var ResponseChanMapActionChan = make(chan ResponseChanMapAction, 1000)
 
 // 对 ResponseChanMap 的一次操作

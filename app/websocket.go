@@ -2,16 +2,16 @@ package app
 
 import "github.com/gorilla/websocket"
 
-// 全局 Websocket 连接
+// Frontend 和 Proxy 的连接
 var WebsocketConns = []*WebsocketConn{}
 
-// 添加 Websocket 连接的队列
+// 消息队列：添加 Frontend 和 Proxy 的连接
 var WebsocketConnChan = make(chan *WebsocketConn, 1)
 
-// 删除 Websocket 连接的队列
+// 消息队列：删除 Frontend 和 Proxy 的连接
 var WebsocketConnDelChan = make(chan string, 1)
 
-// Websocket 连接
+// Frontend 和 Proxy 的连接
 type WebsocketConn struct {
 	Id string
 	Conn *websocket.Conn
