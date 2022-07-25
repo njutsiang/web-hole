@@ -16,7 +16,7 @@ HTTP 后端服务端。Backend 可以是任何环境的 HTTP 服务器，可以�
 
 ## 代理流程
 
-<img src="https://github.com/njutsiang/web-hole/tree/main/doc/process.png">
+<img src="https://github.com/njutsiang/web-hole/raw/main/doc/process.png">
 
 ## 能解决什么问题？
 
