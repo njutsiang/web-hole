@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"hole/app"
+	"github.com/njutsiang/web-hole/app"
 	"log"
 	"net/http"
 	"strings"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"hole/app"
-	"hole/command"
+	"github.com/njutsiang/web-hole/app"
+	"github.com/njutsiang/web-hole/command"
 )
 
 func main() {

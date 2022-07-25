@@ -1,7 +1,7 @@
 package command
 
 import (
-	"hole/command/controllers"
+	"github.com/njutsiang/web-hole/command/controllers"
 	"os"
 )
 

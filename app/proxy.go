@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/gorilla/websocket"
-	"hole/exception"
+	"github.com/njutsiang/web-hole/exception"
 	"log"
 	"net/url"
 	"time"

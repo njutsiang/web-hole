@@ -1,6 +1,6 @@
 package controllers
 
-import "hole/logics"
+import "github.com/njutsiang/web-hole/logics"
 
 // 启动 Frontend
 func StartFrontend() {

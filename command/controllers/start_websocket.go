@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"hole/app"
-	"hole/logics"
+	"github.com/njutsiang/web-hole/app"
+	"github.com/njutsiang/web-hole/logics"
 	"log"
 	"net/http"
 )

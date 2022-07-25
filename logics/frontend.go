@@ -2,7 +2,7 @@ package logics
 
 import (
 	"encoding/json"
-	"hole/app"
+	"github.com/njutsiang/web-hole/app"
 	"log"
 )
 

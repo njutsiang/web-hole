@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"hole/app"
+	"github.com/njutsiang/web-hole/app"
 	"log"
 	"net/http"
 )

@@ -3,7 +3,7 @@ package logics
 import (
 	"encoding/json"
 	"github.com/gorilla/websocket"
-	"hole/app"
+	"github.com/njutsiang/web-hole/app"
 	"log"
 	"math/rand"
 )

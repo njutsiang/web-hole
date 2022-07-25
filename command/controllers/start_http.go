@@ -3,8 +3,8 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"hole/app"
-	"hole/logics"
+	"github.com/njutsiang/web-hole/app"
+	"github.com/njutsiang/web-hole/logics"
 	"log"
 )
 

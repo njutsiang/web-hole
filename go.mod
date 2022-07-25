@@ -1,4 +1,4 @@
-module hole
+module github.com/njutsiang/web-hole
 
 go 1.16
 
