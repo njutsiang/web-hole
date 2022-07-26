@@ -68,9 +68,13 @@ func ProxyRequest(request app.Request) {
 			newRequest.Header.Add(key, value)
 		}
 	}
-	response, err := (&http.Client{
+	client := &http.Client{
 		Timeout: time.Duration(request.Timeout) * time.Second,
-	}).Do(newRequest)
+		CheckRedirect: func(_ *http.Request, _ []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+	response, err := client.Do(newRequest)
 	if err != nil {
 		ReplyError(request.Id, err)
 		return

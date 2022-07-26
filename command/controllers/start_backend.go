@@ -29,6 +29,9 @@ func StartBackend() {
 			"data": "demo2",
 		})
 	})
+	engine.GET("/demo3", func(c *gin.Context) {
+		c.Redirect(http.StatusFound, "/demo2")
+	})
 	err := engine.Run(fmt.Sprintf(":%d", app.Config.Backend.HttpPort))
 	if err != nil {
 		app.Log.Error("启动 Backend 服务失败 " + err.Error())
