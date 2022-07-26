@@ -2,6 +2,7 @@ package logics
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
@@ -72,6 +73,11 @@ func ProxyRequest(request app.Request) {
 		Timeout: time.Duration(request.Timeout) * time.Second,
 		CheckRedirect: func(_ *http.Request, _ []*http.Request) error {
 			return http.ErrUseLastResponse
+		},
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
 		},
 	}
 	response, err := client.Do(newRequest)
