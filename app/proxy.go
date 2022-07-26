@@ -11,7 +11,13 @@ import (
 var ProxyConn *websocket.Conn
 
 // 消息队列：待回复的消息
-var ReplyMessageChan = make(chan []byte, 1000)
+var ReplyMessageChan = make(chan ReplyMessage, 1000)
+
+// 回复的消息
+type ReplyMessage struct {
+	Type int
+	Data []byte
+}
 
 // 连接到 Frontend
 func ConnectFrontend(options ...bool) {

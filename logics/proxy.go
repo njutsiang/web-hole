@@ -14,16 +14,13 @@ import (
 
 // 发送心跳
 func SendHeartbeat() {
-	var err error
 	for {
 		time.Sleep(10 * time.Second)
 		if app.ProxyConn == nil {
 			app.ConnectFrontend(true)
 		}
-		err = app.ProxyConn.WriteMessage(websocket.PingMessage, []byte{})
-		if err != nil {
-			app.Log.Error("发送心跳失败 " + err.Error())
-			app.ConnectFrontend(true)
+		app.ReplyMessageChan <- app.ReplyMessage{
+			Type: websocket.PingMessage,
 		}
 	}
 }
@@ -90,7 +87,10 @@ func ReplyError(requestId string, err error) {
 	}
 	app.Log.Info(fmt.Sprintf("向 Frontend 回复响应：%s %d %s", requestId, response.StatusCode, err.Error()))
 	responseJson, _ := json.Marshal(response)
-	app.ReplyMessageChan <- responseJson
+	app.ReplyMessageChan <- app.ReplyMessage{
+		Type: websocket.TextMessage,
+		Data: responseJson,
+	}
 }
 
 // 回复一个响应
@@ -109,19 +109,23 @@ func ReplyResponse(requestId string, response *http.Response) {
 	}
 	app.Log.Info(fmt.Sprintf("向 Frontend 回复响应：%s %d", requestId, response.StatusCode))
 	newResponseJson, _ := json.Marshal(newResponse)
-	app.ReplyMessageChan <- newResponseJson
+	app.ReplyMessageChan <- app.ReplyMessage{
+		Type: websocket.TextMessage,
+		Data: newResponseJson,
+	}
 }
 
 // 消费消息队列：待回复的消息
 func ConsumeReplyMessageChan() {
-	for message := range app.ReplyMessageChan {
+	for replyMessage := range app.ReplyMessageChan {
 		if app.ProxyConn == nil {
 			app.Log.Error("与 Frontend 的连接不存在")
 			continue
 		}
-		err := app.ProxyConn.WriteMessage(websocket.TextMessage, message)
+		err := app.ProxyConn.WriteMessage(replyMessage.Type, replyMessage.Data)
 		if err != nil {
 			app.Log.Error("向 Frontend 发送响应失败" + err.Error())
+			app.ProxyConn = nil
 		}
 	}
 }
