@@ -9,32 +9,32 @@ import (
 )
 
 // 添加 Websocket 连接到全局
-func AddWebsocketConn(conn *app.WebsocketConn) {
-	app.WebsocketConnChan <- conn
+func AddFrontendWebsocket(conn *app.FrontendWebsocket) {
+	app.FrontendWebsocketChan <- conn
 }
 
 // 消费消息队列：添加 Frontend 和 Proxy 的连接
-func ConsumeWebsocketConnChan() {
-	for websocketConn := range app.WebsocketConnChan {
-		app.WebsocketConns = append(app.WebsocketConns, websocketConn)
-		app.Log.Info("将与 Proxy 的连接添加到全局 " + websocketConn.Id)
+func ConsumeFrontendWebsocketChan() {
+	for frontendWebsocket := range app.FrontendWebsocketChan {
+		app.FrontendWebsockets = append(app.FrontendWebsockets, frontendWebsocket)
+		app.Log.Info("将与 Proxy 的连接添加到全局 " + frontendWebsocket.Id)
 	}
 }
 
 // 从全局移除 Websocket 连接
-func DelWebsocketConn(connId string) {
-	app.WebsocketConnDelChan <- connId
+func DelFrontendWebsocket(connId string) {
+	app.FrontendWebsocketDelChan <- connId
 }
 
 // 消费消息队列：删除 Frontend 和 Proxy 的连接
-func ConsumeWebsocketConnDelChan() {
-	for connId := range app.WebsocketConnDelChan {
-		for i, websocketConn := range app.WebsocketConns {
-			if websocketConn.Id == connId {
-				if i == len(app.WebsocketConns) - 1 {
-					app.WebsocketConns = app.WebsocketConns[0:i]
+func ConsumeFrontendWebsocketDelChan() {
+	for connId := range app.FrontendWebsocketDelChan {
+		for i, frontendWebsocket := range app.FrontendWebsockets {
+			if frontendWebsocket.Id == connId {
+				if i == len(app.FrontendWebsockets) - 1 {
+					app.FrontendWebsockets = app.FrontendWebsockets[0:i]
 				} else {
-					app.WebsocketConns = append(app.WebsocketConns[0:i], app.WebsocketConns[i+1:]...)
+					app.FrontendWebsockets = append(app.FrontendWebsockets[0:i], app.FrontendWebsockets[i+1:]...)
 				}
 				app.Log.Info("从全局移除与 Proxy 的连接 " + connId)
 				break
@@ -65,8 +65,8 @@ func ReceiveProxyResponse(message []byte) {
 // 消费消息队列：发送到代理服务器的消息
 func ConsumeRequestMessageChan() {
 	for message := range app.RequestMessageChan {
-		websocketConn := app.WebsocketConns[rand.Intn(len(app.WebsocketConns))]
-		err := websocketConn.Conn.WriteMessage(websocket.TextMessage, message)
+		frontendWebsocket := app.FrontendWebsockets[rand.Intn(len(app.FrontendWebsockets))]
+		err := frontendWebsocket.Conn.WriteMessage(websocket.TextMessage, message)
 		if err != nil {
 			app.Log.Error("将请求发送至 Proxy 失败 " + err.Error())
 		}

@@ -12,10 +12,10 @@ func StartFrontend() {
 	go logics.ConsumeRequestMessageChan()
 
 	// 消费消息队列：添加 Frontend 和 Proxy 的连接
-	go logics.ConsumeWebsocketConnChan()
+	go logics.ConsumeFrontendWebsocketChan()
 
 	// 消费消息队列：删除 Frontend 和 Proxy 的连接
-	go logics.ConsumeWebsocketConnDelChan()
+	go logics.ConsumeFrontendWebsocketDelChan()
 
 	// 启动 HTTP 服务
 	go StartHttp()

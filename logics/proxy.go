@@ -16,7 +16,7 @@ import (
 // 发送心跳
 func SendHeartbeat() {
 	for {
-		time.Sleep(10 * time.Second)
+		time.Sleep(3 * time.Second)
 		if app.ProxyConn == nil {
 			app.ConnectFrontend(true)
 		}
@@ -85,6 +85,7 @@ func ProxyRequest(request app.Request) {
 		ReplyError(request.Id, err)
 		return
 	}
+	client.CloseIdleConnections()
 	ReplyResponse(request.Id, response)
 }
 

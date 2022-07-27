@@ -26,13 +26,13 @@ func StartWebsocket() {
 			return
 		}
 		connId := uuid.NewString()
-		logics.AddWebsocketConn(&app.WebsocketConn{
+		logics.AddFrontendWebsocket(&app.FrontendWebsocket{
 			Id: connId,
 			Conn: conn,
 		})
 		defer func() {
 			app.Log.Info("关闭与 Proxy 的连接")
-			logics.DelWebsocketConn(connId)
+			logics.DelFrontendWebsocket(connId)
 			err = conn.Close()
 			if err != nil {
 				app.Log.Error("关闭与 Proxy 的连接失败 " + err.Error())

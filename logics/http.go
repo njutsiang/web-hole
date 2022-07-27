@@ -36,7 +36,7 @@ func HttpHandler(c *gin.Context) {
 	}()
 
 	// 判断代理服务器是否存在
-	if len(app.WebsocketConns) == 0 {
+	if len(app.FrontendWebsockets) == 0 {
 		c.JSON(http.StatusBadGateway, map[string]interface{}{
 			"error": "代理服务器不存在",
 		})
