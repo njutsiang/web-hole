@@ -5,6 +5,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"io"
 	"os"
+	"strings"
 )
 
 // 配置
@@ -41,7 +42,14 @@ type ConfigYaml struct {
 
 // 读取配置文件
 func InitConfig() {
-	file, err := os.Open("./config.yaml")
+	configPath := "./config.yaml"
+	if len(os.Args) >= 3 {
+		values := strings.Split(os.Args[2], "=")
+		if len(values) == 2 && values[0] == "--config" && values[1] != "" {
+			configPath = values[1]
+		}
+	}
+	file, err := os.Open(configPath)
 	if err != nil {
 		exception.Throw(exception.InitConfigFailed, "打开配置文件失败 " + err.Error())
 		return

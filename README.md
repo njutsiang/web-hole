@@ -37,7 +37,7 @@ chmod +x web-hole
 
 ### 启动 Frontend
 
-在云主机上启动 Frontend 服务，先在 web-hole 所在目录创建配置文件 config.yaml
+在云主机上启动 Frontend 服务，先创建配置文件 config.yaml
 
 ```
 Log:
@@ -56,12 +56,12 @@ Frontend:
 启动服务
 
 ```
-./web-hole StartFrontend
+./web-hole StartFrontend --config=config.yaml
 ```
 
 ### 启动 Proxy
 
-在内网主机上启动 Proxy 服务，先在 web-hole 所在目录创建配置文件 config.yaml
+在内网主机上启动 Proxy 服务，先创建配置文件 config.yaml
 
 ```
 Log:
@@ -79,7 +79,7 @@ Proxy:
 启动服务
 
 ```
-./web-hole StartProxy
+./web-hole StartProxy --config=config.yaml
 ```
 
 ### 配置说明
