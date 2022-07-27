@@ -26,17 +26,65 @@ HTTP 后端服务端。Backend 可以是任何环境的 HTTP 服务器，可以�
 
 3、如果你的家里有部署 NAS，也或许只需要一台旧电脑，给它插上大硬盘，就可以将你收藏多年的“学习资料”分享给你的水友们了。
 
-## TODO LIST
+## 安装说明
 
-- [x] 解决 Websocket 并发写的问题
-- [x] 解决等待响应的 ChanMap 并发读写的问题
-- [x] Frontend 支持多个 Proxy 服务
-- [x] 优化日志组件、日志级别
-- [x] Frontend 支持 https
-- [x] 解决发送心跳失败和普通消息存在并发写的问题
-- [x] 支持 301、302 跳转的代理
-- [x] Proxy 支持多连接
-- [ ] 完善使用说明文档
+分别在云主机和内网主机上下载可执行文件：
+
+```
+wget https://github.com/njutsiang/web-hole/releases/download/[版本]/web-hole
+chmod +x web-hole
+```
+
+### 启动 Frontend
+
+在云主机上启动 Frontend 服务，先在 web-hole 所在目录创建配置文件 config.yaml
+
+```
+Log:
+  Level: "error"
+  ExportFile:
+    Path: "./run.log"
+
+Frontend:
+  HttpPort: 8112
+  HttpTimeout: 30
+  WebsocketPort: 8113
+  WebsocketPath: "/proxy"
+  SecretKey: "123456"
+```
+
+启动服务
+
+```
+./web-hole StartFrontend
+```
+
+### 启动 Proxy
+
+在内网主机上启动 Proxy 服务，先在 web-hole 所在目录创建配置文件 config.yaml
+
+```
+Log:
+  Level: "error"
+  ExportFile:
+    Path: "./run.log"
+
+Proxy:
+  FrontendUrl: "ws://106.75.114.55:8113/proxy"
+  BackendHost: "http://192.168.1.128:8114"
+  WebsocketNum: 12
+  SecretKey: "123456"
+```
+
+启动服务
+
+```
+./web-hole StartProxy
+```
+
+### 配置说明
+
+配置文件详细说明：[https://github.com/njutsiang/web-hole/blob/main/doc/config.md](https://github.com/njutsiang/web-hole/blob/main/doc/config.md)
 
 ## 压力测试
 
