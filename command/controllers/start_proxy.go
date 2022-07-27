@@ -13,20 +13,25 @@ func StartProxy() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 
-	// 消费消息队列：待回复的消息
-	go logics.ConsumeReplyMessageChan()
+	for num := 0; num < app.Config.Proxy.WebsocketNum; num++ {
+		// 初始化消息队列：待回复的消息
+		app.ReplyMessageQueues = append(app.ReplyMessageQueues, make(chan app.ReplyMessage, 1000))
 
-	// 连接到 Frontend
-	app.ConnectFrontend()
+		// 连接到 Frontend
+		app.ProxyWebsockets = append(app.ProxyWebsockets, logics.ConnectFrontend(num))
 
-	// 发送心跳
-	go logics.SendHeartbeat()
+		// 发送心跳
+		go logics.SendHeartbeat(num)
 
-	// 读取请求
-	go logics.ReadRequest()
+		// 读取请求
+		go logics.ReadRequest(num)
+
+		// 消费消息队列：待回复的消息
+		go logics.ConsumeReplyMessageQueue(num)
+	}
 
 	// 当进程停止时，关闭连接
 	<- interrupt
 	app.Log.Info("进程停止")
-	app.DisconnectFrontend()
+	logics.DisconnectFrontend()
 }

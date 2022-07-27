@@ -16,6 +16,7 @@ Frontend:
 Proxy:
   FrontendUrl: "ws://127.0.0.1:8113/proxy"
   BackendHost: "http://127.0.0.1:8114"
+  WebsocketNum: 3
   SecretKey: "123456"
 
 Backend:

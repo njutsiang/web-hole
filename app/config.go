@@ -29,9 +29,10 @@ type ConfigYaml struct {
 		SecretKey     string `yaml:"SecretKey"`
 	} `yaml:"Frontend"`
 	Proxy struct {
-		FrontendUrl string `yaml:"FrontendUrl"`
-		BackendHost string `yaml:"BackendHost"`
-		SecretKey   string `yaml:"SecretKey"`
+		FrontendUrl  string `yaml:"FrontendUrl"`
+		BackendHost  string `yaml:"BackendHost"`
+		WebsocketNum int    `yaml:"WebsocketNum"`
+		SecretKey    string `yaml:"SecretKey"`
 	} `yaml:"Proxy"`
 	Backend struct {
 		HttpPort int `yaml:"HttpPort"`
